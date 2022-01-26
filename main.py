@@ -41,17 +41,45 @@ print('----------------')
 print('')
 print('waiting for page to load')
 time.sleep(4)
+leads = []
 driver.switch_to.default_content()
-table_rows = driver.find_elements(By.TAG_NAME, 'tr')
 
-print(len(table_rows))
-# for row in table_rows:
-#     name = driver.find_element_by_css_selector('[data-anonymize=person-name]')
-#     title = driver.find_element_by_css_selector('[data-anonymize=job-title]')
-#     company = driver.find_element_by_css_selector('[data-anonymize=company-name]')
-#     print(f"{name.text} is the {title.text} at the company {company.text}")
+name_list = []
+title_list = []
+company_list = []
+location_list = []
+# for i in driver.find_elements(By.TAG_NAME, 'tr'):
+names = driver.find_elements_by_css_selector('[data-anonymize=person-name]')
+titles = driver.find_elements_by_css_selector('[data-anonymize=job-title]')
+companies = driver.find_elements_by_css_selector('[data-anonymize=company-name]')
+locations = driver.find_elements_by_css_selector('[data-anonymize=location]')
+for name in names:
+    print(name.text)
+    name_list.append(name.text)
+for title in titles:
+    print(title.text)
+    title_list.append(title.text)
+for company in companies:
+    print(company.text)
+    company_list.append(company.text)
+for location in locations:
+    print(location.text)
+    location_list.append(location.text)
+print(name_list)
+print(company_list)
+print(title_list)
+# print(f"the name list length is: {str(len(name_list))}")
+# print(title_list)
+# print(f"the title list length is {str(len(title_list))}")
+# print(company_list)
+# print(f"the company list lenght is: {str(len(company_list))}")
+
+
+
 
 # driver.find_elements_by_css_selector("[aria-label=XXXX]")
 
 # https://stackoverflow.com/questions/46669850/using-aria-label-to-locate-and-click-an-element-with-python3-and-selenium
+
+
 
