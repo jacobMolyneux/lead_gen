@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 import time
+import csv
 
 driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
 
@@ -48,38 +49,46 @@ name_list = []
 title_list = []
 company_list = []
 location_list = []
+
 # for i in driver.find_elements(By.TAG_NAME, 'tr'):
-names = driver.find_elements_by_css_selector('[data-anonymize=person-name]')
-titles = driver.find_elements_by_css_selector('[data-anonymize=job-title]')
-companies = driver.find_elements_by_css_selector('[data-anonymize=company-name]')
-locations = driver.find_elements_by_css_selector('[data-anonymize=location]')
-for name in names:
-    print(name.text)
-    name_list.append(name.text)
-for title in titles:
-    print(title.text)
-    title_list.append(title.text)
-for company in companies:
-    print(company.text)
-    company_list.append(company.text)
-for location in locations:
-    print(location.text)
-    location_list.append(location.text)
-print(name_list)
-print(company_list)
-print(title_list)
-# print(f"the name list length is: {str(len(name_list))}")
-# print(title_list)
-# print(f"the title list length is {str(len(title_list))}")
-# print(company_list)
-# print(f"the company list lenght is: {str(len(company_list))}")
+def scrape_leads():
+    names = driver.find_elements_by_css_selector('[data-anonymize=person-name]')
+    titles = driver.find_elements_by_css_selector('[data-anonymize=job-title]')
+    companies = driver.find_elements_by_css_selector('[data-anonymize=company-name]')
+    locations = driver.find_elements_by_css_selector('[data-anonymize=location]')
+    for i in range(len(names)):
+        print(names[i].get_attribute('href'))
+
+        
+#     for i in range(len(names)):
+#         leads.append({"Company": companies[i].text, "Name": names[i].text, "Title": titles[i].text,"Phone Number": '', "Location": locations[i].text, "LinkedIn": f"https://linkedin.com/{links[i]}"})
+# print('scraping page number 1')
+# scrape_leads()
+# print('page 1 scraped')
+# print(leads)
+
+# time.sleep(3)
+
+# next_button = driver.find_element_by_css_selector('[aria-label=Next]')
+# next_button.click()
+# time.sleep(1)
+# print('scraping page 2')
+# scrape_leads()
+# print('scraped page number 2')
 
 
+# print(leads)
 
+# field_names = ['Company', 'Name', 'Title', "Phone Number", "Location", "LinkedIn"]
+# with open('/Users/jacobmolyneux/Desktop/new_Leads.csv', 'w') as csvfile:
+#     writer = csv.DictWriter(csvfile, fieldnames=field_names)
+#     writer.writeheader()
+#     writer.writerows(leads)
 
-# driver.find_elements_by_css_selector("[aria-label=XXXX]")
+print('beginning scrape')
+scrape_leads()
 
-# https://stackoverflow.com/questions/46669850/using-aria-label-to-locate-and-click-an-element-with-python3-and-selenium
+print('scrape over')
 
 
 
