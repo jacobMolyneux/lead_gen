@@ -12,7 +12,7 @@ driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
 username = 'jacobmolyneux2@gmail.com'
 password = 'Jacob#1!'
 print('starting scrape.....')
-driver.get("https://www.linkedin.com/sales/lists/people/6892306035382521856?sortCriteria=CREATED_TIME&sortOrder=DESCENDING")
+driver.get("https://www.linkedin.com/sales/lists/people/6892620939540918272?sortCriteria=CREATED_TIME&sortOrder=DESCENDING")
 print('waiting for page to load')
 time.sleep(6)
     # Store iframe web element
@@ -48,11 +48,6 @@ time.sleep(4)
 leads = []
 driver.switch_to.default_content()
 
-name_list = []
-title_list = []
-company_list = []
-location_list = []
-
 # for i in driver.find_elements(By.TAG_NAME, 'tr'):
 def scrape_leads():
     table = driver.find_element(By.TAG_NAME, 'tbody')
@@ -87,31 +82,23 @@ def scrape_leads():
         leads.append({"Company": company, "Name": name, "Title": title, "Phone Number": '', "Location": location, "LinkedIn": linkedIn})
 
     
-print('scraping page')
-scrape_leads()
-print('page scraped')
-time.sleep(3)
 next_button = driver.find_element_by_css_selector('[aria-label=Next]')
-next_button.click()
-time.sleep(3)
+while next_button.is_enabled():
+    print('scraping page')
+    scrape_leads()
+    next_button = driver.find_element_by_css_selector('[aria-label=Next]')
+    next_button.click()
+    time.sleep(3)
 
-print('scraping page')
+# runs last time to scrape the last page
 scrape_leads()
-print('page scraped')
-time.sleep(3)
-next_button = driver.find_element_by_css_selector('[aria-label=Next]')
-next_button.click()
-time.sleep(3)
-
-print('scraping page')
-scrape_leads()
-print('page scraped')
-time.sleep(3)
 
 
 
+
+# create a csv file and save it to computer
 field_names = ['Company', 'Name', 'Title', "Phone Number", "Location", "LinkedIn"]
-with open('/Users/jacobmolyneux/Desktop/MST_Leads.csv', 'w') as csvfile:
+with open('/Users/jacobmolyneux/Desktop/pst_cpg_Leads.csv', 'w') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=field_names)
     writer.writeheader()
     writer.writerows(leads)
