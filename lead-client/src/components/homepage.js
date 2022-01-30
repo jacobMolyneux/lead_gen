@@ -7,6 +7,7 @@ const Homepage = () => {
     let [username, setUsername] = useState('');
     let [password, setPassword] = useState('');
     let [leadLink, setLeadLink] = useState(''); 
+    let [email, setEmail] = useState('');
     let [submission, setSubmission] = useState([]);
 
 
@@ -15,7 +16,8 @@ const Homepage = () => {
         setSubmission(submission = {
             "Username": username,
             "Password": password,
-            "Link":leadLink
+            "Link":leadLink,
+            "Email": email
     })
     console.log(submission)
     }
@@ -31,10 +33,15 @@ const Homepage = () => {
                     <Form.Label>Enter Password:</Form.Label>
                     <Form.Control type = 'text' placeholder ='Password' onChange = {(e) => setPassword(password = e.target.value)}></Form.Control>
                 </Form.Group>
+                <Form.Group>
+                    <Form.Label>Enter Email to send leads to:</Form.Label>
+                    <Form.Control type = 'text' placeholder = 'Enter Email' onChage = {(e) => setEmail(email = e.target.value)}></Form.Control>
+                </Form.Group>
                 <Form.Group className = 'mb-4'>
                     <Form.Label>Enter Lead List URL:</Form.Label>
                     <Form.Control type = 'text' placeholder = 'Lead List' onChange = {(e) => setLeadLink(leadLink = e.target.value)}></Form.Control>
                 </Form.Group>
+
                 <Button className = 'm-3' type = 'submit' onClick = {submitData} >Get Leads</Button>
             </Form>
         </Container> 

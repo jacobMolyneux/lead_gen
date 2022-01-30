@@ -9,10 +9,14 @@ import csv
 
 driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
 
-username = 'jacobmolyneux2@gmail.com'
-password = 'Jacob#1!'
+# username = 'jacobmolyneux2@gmail.com'
+# password = 'Jacob#1!'
+username = input('What is your Linkedin Email?')
+password = input('What is your LinkedIn Password?')
+url = input('Enter the LinkedIn Lead List that you want to scrape:')
+
 print('starting scrape.....')
-driver.get("https://www.linkedin.com/sales/lists/people/6892620939540918272?sortCriteria=CREATED_TIME&sortOrder=DESCENDING")
+driver.get(url)
 print('waiting for page to load')
 time.sleep(6)
     # Store iframe web element
@@ -74,12 +78,15 @@ def scrape_leads():
         except NoSuchElementException:
             title = 'N/A'
             pass
+        # getting the linkedin profile ** tricky and a pain in the ass because it changes **
         try:
-            linkedIn = row.find_element(By.CSS_SELECTOR, '[data-anonymize=person-name]' ).get_attribute('href')
+            figure = row.find_element(By.TAG_NAME, 'figure')
+            linkedIn = figure.find_element(By.TAG_NAME, 'a').get_attribute('href')
         except NoSuchElementException:
-            linkedIn = "N/A"
+            linkedIn = 'N/A'
             pass
-        leads.append({"Company": company, "Name": name, "Title": title, "Phone Number": '', "Location": location, "LinkedIn": linkedIn})
+            
+        leads.append({"Company": company, "Name": name, "Title": title, "Phone Number": '', "Name_Drop": "","Location": location, "LinkedIn": linkedIn})
 
     
 next_button = driver.find_element_by_css_selector('[aria-label=Next]')
@@ -93,12 +100,12 @@ while next_button.is_enabled():
 # runs last time to scrape the last page
 scrape_leads()
 
-
+print(leads)
 
 
 # create a csv file and save it to computer
-field_names = ['Company', 'Name', 'Title', "Phone Number", "Location", "LinkedIn"]
-with open('/Users/jacobmolyneux/Desktop/pst_cpg_Leads.csv', 'w') as csvfile:
+field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
+with open('/Users/jacobmolyneux/Desktop/good_company_leads.csv', 'w') as csvfile:
     writer = csv.DictWriter(csvfile, fieldnames=field_names)
     writer.writeheader()
     writer.writerows(leads)
