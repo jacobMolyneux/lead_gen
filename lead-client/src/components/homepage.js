@@ -1,7 +1,9 @@
 import Form from 'react-bootstrap/Form';
-import {useState} from 'react'
+import {useState, useEffect} from 'react'
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
+import axios from 'axios';
+
 
 const Homepage = () => {
     let [username, setUsername] = useState('');
@@ -9,8 +11,9 @@ const Homepage = () => {
     let [leadLink, setLeadLink] = useState(''); 
     let [email, setEmail] = useState('');
     let [submission, setSubmission] = useState([]);
+    const base_url = 'http://127.0.0.1:5000/';
 
-
+    
     const submitData = (e) => {
         e.preventDefault()
         setSubmission(submission = {
