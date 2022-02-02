@@ -95,13 +95,14 @@ def generate_leads(username, password, linkedInLink):
     scrape_leads()
 
     # print(leads)
-
-    return leads
     # create a csv file and save it to computer
-    # field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
-    # with open('/Users/jacobmolyneux/Desktop/good_company_leads.csv', 'w') as csvfile:
-    #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
-    #     writer.writeheader()
-    #     writer.writerows(leads)
+    field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
+    with open('/Users/jacobmolyneux/Desktop/cpg_companies_speaker.csv', 'w') as csvfile:
+        writer = csv.DictWriter(csvfile, fieldnames=field_names)
+        writer.writeheader()
+        writer.writerows(leads)
+    return leads
+
+generate_leads('jacobmolyneux2@gmail.com', 'Jacob#1!', 'https://www.linkedin.com/sales/lists/people/6894459854958727168?sortCriteria=CREATED_TIME&sortOrder=DESCENDING')
 
 
