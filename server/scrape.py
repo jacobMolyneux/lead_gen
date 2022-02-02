@@ -3,9 +3,9 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-
 import time
 import csv
+
 def generate_leads(username, password, linkedInLink):
     driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
 
