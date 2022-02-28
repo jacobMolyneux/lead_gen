@@ -3,7 +3,10 @@ import {useState, useEffect} from 'react'
 import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
-import CsvDownload from 'react-json-to-csv'
+import { CSVLink, CSVDownload } from "react-csv";
+
+const { Parser } = require('json2csv');
+
 
 
 const Homepage = () => {
@@ -13,19 +16,39 @@ const Homepage = () => {
     let [email, setEmail] = useState('');
     let [submission, setSubmission] = useState([]);
     let [waiting, setWaiting] = useState(false);
-    const base_url = 'http://127.0.0.1:5000/';
-    let [leadData, setLeadData] = useState('');
+    let [CSVData, setCSVData] = useState('');
 
-    const sendData = () => {
-        axios.post(base_url, {
+    // base url to fetch scraping api
+    const base_url = 'http://127.0.0.1:5000/';
+
+
+    let [leadData, setLeadData] = useState([]);
+    const headers = [
+        {label: "Company", key: 'Company'},
+        {label: "Name", key: 'Name'},
+        {label: "Title", key: 'Title'},
+        {label: "Phone Number", key: 'Phone Number'},
+        {label: "Name Drop", key: 'Name_Drop'},
+        {label: "Location", key: 'Location'},
+        {label: "Linkedin", key: 'LinkedIn'}
+    ]
+    const sendData = async () => {
+        const response = await axios.post(base_url, {
             "username": submission['username'],
             "password": submission['password'],
             "leadListLink": submission['leadListLink'],
         })
-        .then((res) => console.log(res))
-        .then((res) => setLeadData(leadData = res))
-        .then(console.log(`the lead data is: ${leadData.data}`))
+        .then(function (response){
+            console.log(response)
+            setLeadData(leadData.push(response))
+            console.log(`the lead data is: ${JSON.stringify(leadData)}`)
+            const json2csvParser = new Parser();
+            setCSVData(CSVData = json2csvParser.parse(leadData))
+        }
+        )
+        
     }
+    
     const submitData = (e) => {
         e.preventDefault()
         setSubmission(submission = {
@@ -35,9 +58,8 @@ const Homepage = () => {
             "email": email
     })
         sendData()
-    console.log(submission)
-    }
     
+    }
     return(
         <Container>
             <Form className = 'border p-4 rounded '> 
@@ -47,7 +69,7 @@ const Homepage = () => {
                 </Form.Group>
                 <Form.Group className = 'mb-4'>
                     <Form.Label>Enter Password:</Form.Label>
-                    <Form.Control type = 'text' placeholder ='Password' onChange = {(e) => setPassword(password = e.target.value)}></Form.Control>
+                    <Form.Control type = 'password' placeholder ='Password' onChange = {(e) => setPassword(password = e.target.value)}></Form.Control>
                 </Form.Group>
                 <Form.Group className = 'mb-4'>
                     <Form.Label>Enter Lead List URL:</Form.Label>
@@ -56,18 +78,9 @@ const Homepage = () => {
 
                 <Button className = 'm-3' type = 'submit' onClick = {submitData} >Get Leads</Button>
             </Form>
-            <div>
-                <CsvDownload data = {leadData} filename = 'new leads.csv' style = {{ 
-                    width: '100%',
-                    background: 'blue',
-                    color: 'white',
-                    border: 'none',
-                    padding: '10px',
-                    margin: '5px',
-                    fontSize: '25px',
-                    borderRadius: '10px'
-                }}/>
-            </div>
+            
+            <CSVLink data = {CSVData} filename={'Leads.csv'} className="btn btn-primary">Download Me</CSVLink>
+            
         </Container> 
     )
 }
