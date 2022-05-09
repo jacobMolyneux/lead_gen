@@ -4,10 +4,10 @@ import Container from 'react-bootstrap/Container';
 import Button from 'react-bootstrap/Button';
 import axios from 'axios';
 import { CSVLink, CSVDownload } from "react-csv";
+import json2csv from "json2csv";
+import data from './sampledata.json'
 
 const { Parser } = require('json2csv');
-
-
 
 const Homepage = () => {
     let [username, setUsername] = useState('');
@@ -16,13 +16,12 @@ const Homepage = () => {
     let [email, setEmail] = useState('');
     let [submission, setSubmission] = useState([]);
     let [waiting, setWaiting] = useState(false);
-    let [CSVData, setCSVData] = useState('');
+    let [CSVData, setCSVData] = useState([]);
 
     // base url to fetch scraping api
     const base_url = 'http://127.0.0.1:5000/';
 
-
-    let [leadData, setLeadData] = useState([]);
+    let [leadData, setLeadData] = useState(null);
     const headers = [
         {label: "Company", key: 'Company'},
         {label: "Name", key: 'Name'},
@@ -32,6 +31,7 @@ const Homepage = () => {
         {label: "Location", key: 'Location'},
         {label: "Linkedin", key: 'LinkedIn'}
     ]
+
     const sendData = async () => {
         const response = await axios.post(base_url, {
             "username": submission['username'],
@@ -40,10 +40,13 @@ const Homepage = () => {
         })
         .then(function (response){
             console.log(response)
-            setLeadData(leadData.push(response))
+            setLeadData(leadData = response.data)
             console.log(`the lead data is: ${JSON.stringify(leadData)}`)
             const json2csvParser = new Parser();
-            setCSVData(CSVData = json2csvParser.parse(leadData))
+            let data = json2csvParser.parse(leadData)
+            setCSVData(CSVData = data)
+            console.log('the csv data is')
+            console.log(CSVData)
         }
         )
         

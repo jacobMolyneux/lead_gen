@@ -8,11 +8,6 @@ import csv
 
 def generate_leads(username, password, linkedInLink):
     driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
-
-    # username = 'jacobmolyneux2@gmail.com'
-    # password = 'Jacob#1!'
-   
-
     print('starting scrape.....')
     driver.get(linkedInLink)
     print('waiting for page to load')
@@ -45,6 +40,9 @@ def generate_leads(username, password, linkedInLink):
     time.sleep(4)
     leads = []
     driver.switch_to.default_content()
+    select_contract = driver.find_element(By.CLASS_NAME, 'action-select-contract')
+    select_contract.click()
+    time.sleep(4)
 
     # for i in driver.find_elements(By.TAG_NAME, 'tr'):
     def scrape_leads():
@@ -97,12 +95,10 @@ def generate_leads(username, password, linkedInLink):
     # print(leads)
     # create a csv file and save it to computer
     field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
-    with open('/Users/jacobmolyneux/Desktop/cpg_companies_speaker.csv', 'w') as csvfile:
+    with open('/Users/jacobmolyneux/Desktop/CIO_Leads.csv', 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
         writer.writerows(leads)
     return leads
 
-generate_leads('jacobmolyneux2@gmail.com', 'Jacob#1!', 'https://www.linkedin.com/sales/lists/people/6894459854958727168?sortCriteria=CREATED_TIME&sortOrder=DESCENDING')
-
-
+generate_leads('jacobmolyneux2@gmail.com', 'Jacob#1!', 'https://www.linkedin.com/sales/lists/people/6929423334543638528?sortCriteria=CREATED_TIME&sortOrder=DESCENDING')
