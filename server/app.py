@@ -20,4 +20,4 @@ def index():
         return jsonify({"Error":"Problem Scraping, Please check your information is correct and try again."})
 
 if __name__ == '__main__':
-    app.run(debug =True)  
+    app.run(debug =True)
