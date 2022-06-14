@@ -6,10 +6,15 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 import csv
 
-def generate_leads(username, password, linkedInLink):
+def generate_leads():
+    # collect user info to scrape information:
+    user_username = input('What is your Linkedin Email:')
+    user_password = input('what is your Linkedin Password: ')
+    leadListLink = input('what is your LinkedIn Lead list URL: ')
+    # start webscraper
     driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
     print('starting scrape.....')
-    driver.get(linkedInLink)
+    driver.get(leadListLink)
     print('waiting for page to load')
     time.sleep(6)
         # Store iframe web element
@@ -26,9 +31,9 @@ def generate_leads(username, password, linkedInLink):
     password_input = driver.find_element(By.ID, 'password')
     print('found logins')
     print('sending login info')
-    username_input.send_keys(username)
+    username_input.send_keys(user_username)
     time.sleep(1)
-    password_input.send_keys(password)
+    password_input.send_keys(user_password)
     time.sleep(0.3)
     print('login info sent')
     login_button = driver.find_element(By.TAG_NAME, 'button')
@@ -40,11 +45,10 @@ def generate_leads(username, password, linkedInLink):
     time.sleep(4)
     leads = []
     driver.switch_to.default_content()
-    if driver.getCurrentUrl() == 'https://www.linkedin.com/sales/contract-chooser':
-        select_contract = driver.find_element(By.CLASS_NAME, 'action-select-contract')
-        select_contract.click()
-    else: 
-        pass 
+    
+    select_contract = driver.find_element(By.CLASS_NAME, 'action-select-contract')
+    select_contract.click()
+   
 
     time.sleep(4)
 
@@ -99,10 +103,10 @@ def generate_leads(username, password, linkedInLink):
     # print(leads)
     # create a csv file and save it to computer
     field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
-    with open('/Users/jacobmolyneux/Desktop/security.csv', 'w') as csvfile:
+    with open('/Users/jacobmolyneux/Desktop/NewmedDevice.csv', 'w') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=field_names)
         writer.writeheader()
         writer.writerows(leads)
     return leads
 
-generate_leads('jacobmolyneux2@gmail.com', 'Jacob#1!', 'https://www.linkedin.com/sales/lists/people/6937377207799480321?sortCriteria=CREATED_TIME&sortOrder=DESCENDING')
+generate_leads()
