@@ -6,22 +6,29 @@ import axios from 'axios';
 import { CSVLink, CSVDownload } from "react-csv";
 import json2csv from "json2csv";
 import data from './sampledata.json'
-
+import { LoadingSign } from './loadingSign';
 const { Parser } = require('json2csv');
 
 const Homepage = () => {
+    // user information to login to linkedin
     let [username, setUsername] = useState('');
     let [password, setPassword] = useState('');
     let [leadLink, setLeadLink] = useState(''); 
-    let [email, setEmail] = useState('');
+    // holds response from api
+    let [leadData, setLeadData] = useState(null);
+    // holds user request information and send to api
     let [submission, setSubmission] = useState([]);
+    // use for loading sign when scrape is happening
     let [waiting, setWaiting] = useState(false);
+    // holds csv data ?? 
     let [CSVData, setCSVData] = useState([]);
+
+    
 
     // base url to fetch scraping api
     const base_url = 'http://127.0.0.1:5000/';
 
-    let [leadData, setLeadData] = useState(null);
+    
     const headers = [
         {label: "Company", key: 'Company'},
         {label: "Name", key: 'Name'},
@@ -33,6 +40,8 @@ const Homepage = () => {
     ]
 
     const sendData = async () => {
+        const delimeter = `","`
+        const opts = {delimeter}
         const response = await axios.post(base_url, {
             "username": submission['username'],
             "password": submission['password'],
@@ -42,11 +51,10 @@ const Homepage = () => {
             console.log(response)
             setLeadData(leadData = response.data)
             console.log(`the lead data is: ${JSON.stringify(leadData)}`)
-            const json2csvParser = new Parser();
+            const json2csvParser = new Parser(opts);
             let data = json2csvParser.parse(leadData)
             setCSVData(CSVData = data)
-            console.log('the csv data is')
-            console.log(CSVData)
+            
         }
         )
         
@@ -58,7 +66,7 @@ const Homepage = () => {
             "username": username,
             "password": password,
             "leadListLink":leadLink,
-            "email": email
+            
     })
         sendData()
     

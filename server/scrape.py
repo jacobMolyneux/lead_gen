@@ -6,15 +6,10 @@ from selenium.common.exceptions import NoSuchElementException
 import time
 import csv
 
-def generate_leads():
-    # collect user info to scrape information:
-    user_username = input('What is your Linkedin Email:')
-    user_password = input('what is your Linkedin Password: ')
-    leadListLink = input('what is your LinkedIn Lead list URL: ')
-    # start webscraper
+def generate_leads(username, password, linkedInLink):
     driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
     print('starting scrape.....')
-    driver.get(leadListLink)
+    driver.get(linkedInLink)
     print('waiting for page to load')
     time.sleep(6)
         # Store iframe web element
@@ -31,9 +26,9 @@ def generate_leads():
     password_input = driver.find_element(By.ID, 'password')
     print('found logins')
     print('sending login info')
-    username_input.send_keys(user_username)
+    username_input.send_keys(username)
     time.sleep(1)
-    password_input.send_keys(user_password)
+    password_input.send_keys(password)
     time.sleep(0.3)
     print('login info sent')
     login_button = driver.find_element(By.TAG_NAME, 'button')
@@ -97,16 +92,16 @@ def generate_leads():
         next_button.click()
         time.sleep(3)
 
-    # runs last time to scrape the last page
+    
     scrape_leads()
 
-    # print(leads)
+    
     # create a csv file and save it to computer
-    field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
-    with open('/Users/jacobmolyneux/Desktop/NewmedDevice.csv', 'w') as csvfile:
-        writer = csv.DictWriter(csvfile, fieldnames=field_names)
-        writer.writeheader()
-        writer.writerows(leads)
+    # field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
+    # with open('/Users/jacobmolyneux/Desktop/NewmedDevice.csv', 'w') as csvfile:
+    #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
+    #     writer.writeheader()
+    #     writer.writerows(leads)
     return leads
 
-generate_leads()
+
