@@ -7,7 +7,8 @@ import { CSVLink, CSVDownload } from "react-csv";
 import json2csv from "json2csv";
 import data from './sampledata.json'
 import { LoadingSign } from './loadingSign';
-const { Parser } = require('json2csv');
+import CsvDownload from 'react-json-to-csv'
+
 
 const Homepage = () => {
     // user information to login to linkedin
@@ -21,7 +22,7 @@ const Homepage = () => {
     // use for loading sign when scrape is happening
     let [waiting, setWaiting] = useState(false);
     // holds csv data ?? 
-    let [CSVData, setCSVData] = useState([]);
+
 
     
 
@@ -40,8 +41,7 @@ const Homepage = () => {
     ]
 
     const sendData = async () => {
-        const delimeter = `","`
-        const opts = {delimeter}
+        
         const response = await axios.post(base_url, {
             "username": submission['username'],
             "password": submission['password'],
@@ -51,9 +51,7 @@ const Homepage = () => {
             console.log(response)
             setLeadData(leadData = response.data)
             console.log(`the lead data is: ${JSON.stringify(leadData)}`)
-            const json2csvParser = new Parser(opts);
-            let data = json2csvParser.parse(leadData)
-            setCSVData(CSVData = data)
+            
             
         }
         )
@@ -90,7 +88,9 @@ const Homepage = () => {
                 <Button className = 'm-3' type = 'submit' onClick = {submitData} >Get Leads</Button>
             </Form>
             
-            <CSVLink data = {CSVData} filename={'Leads.csv'} className="btn btn-primary">Download Me</CSVLink>
+            <CsvDownload data={leadData} />
+
+
             
         </Container> 
     )
