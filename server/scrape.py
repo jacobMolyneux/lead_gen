@@ -5,9 +5,18 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import time
 import csv
+import os
+
+
+chrome_options = webdriver.ChromeOptions()
+chrome_options.add_argument("--headless")
+chrome_options.add_argument("--disable-dev-shm-usage")
+chrome_options.add_argument("--no-sandbox")
+chrome_options.binary_location = os.environ.get("GOOGLE_CHROME_BIN")
 
 def generate_leads(username, password, linkedInLink):
-    driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver')
+
+    driver = webdriver.Chrome('/Users/jacobmolyneux/Desktop/chromedriver', chrome_options=chrome_options)
     print('starting scrape.....')
     driver.get(linkedInLink)
     print('waiting for page to load')
@@ -95,13 +104,7 @@ def generate_leads(username, password, linkedInLink):
     
     scrape_leads()
 
-    
-    # create a csv file and save it to computer
-    # field_names = ['Company', 'Name', 'Title', "Phone Number","Name_Drop", "Location", "LinkedIn"]
-    # with open('/Users/jacobmolyneux/Desktop/NewmedDevice.csv', 'w') as csvfile:
-    #     writer = csv.DictWriter(csvfile, fieldnames=field_names)
-    #     writer.writeheader()
-    #     writer.writerows(leads)
     return leads
+
 
 
